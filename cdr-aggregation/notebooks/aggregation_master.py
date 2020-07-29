@@ -74,19 +74,19 @@ from modules.setup import *
 # In[7]:
 
 
-# ds.standardize_csv_files(show=True)
-# ds.save_as_parquet()
+ds.standardize_csv_files(show=True)
+ds.save_as_parquet()
 
 
-# In[8]:
+# In[ ]:
 
 
-#ds.load_standardized_parquet_file()
+ds.load_standardized_parquet_file()
 
 
 # ### Alternatively, specify and load hive table
 
-# In[9]:
+# In[ ]:
 
 
 # # Specify and load hive data
@@ -100,25 +100,25 @@ from modules.setup import *
 
 # ### Or load a sample file
 
-# In[10]:
+# In[ ]:
 
 
 ## Use this in case you want to sample the data and run the code on the sample
 
 # #ds.sample_and_save(number_of_ids=1000)
-ds.load_sample('sample_feb_mar2020')
-ds.parquet_df = ds.sample_df
+# ds.load_sample('sample_feb_mar2020')
+# ds.parquet_df = ds.sample_df
 
 
 # ## Load geo data
 
-# In[11]:
+# In[ ]:
 
 
 ds.load_geo_csvs()
 
 
-# In[12]:
+# In[ ]:
 
 
 ## Use this in case you want to cluster the towers and create a distance matrix
@@ -131,7 +131,7 @@ ds.load_geo_csvs()
 # ds.admin3_tower_map, ds.distances  = clusterer.cluster_towers()
 
 
-# In[13]:
+# In[ ]:
 
 
 ## Use this in case you want to create a voronoi tesselation
@@ -145,7 +145,7 @@ ds.load_geo_csvs()
 
 # ## Flowminder indicators for admin2
 
-# In[14]:
+# In[ ]:
 
 
 agg_flowminder_admin2 = flowminder_aggregator(result_stub = '/admin2/flowminder',
@@ -157,7 +157,7 @@ agg_flowminder_admin2.attempt_aggregation()
 
 # ## Flowminder indicators for admin3
 
-# In[15]:
+# In[ ]:
 
 
 agg_flowminder_admin3 = flowminder_aggregator(result_stub = '/admin3/flowminder',
@@ -169,7 +169,7 @@ agg_flowminder_admin3.attempt_aggregation()
 
 # ## Priority indicators for admin2
 
-# In[16]:
+# In[ ]:
 
 
 agg_priority_admin2 = priority_aggregator(result_stub = '/admin2/priority',
@@ -177,21 +177,16 @@ agg_priority_admin2 = priority_aggregator(result_stub = '/admin2/priority',
                                regions = 'admin2_tower_map')
 
 agg_priority_admin2.attempt_aggregation(indicators_to_produce = {'unique_subscribers_per_day' : ['unique_subscribers', 'day'],
-                                                                 'percent_of_all_subscribers_active_per_day' : ['percent_of_all_subscribers_active', 'day'],
                                                                  'origin_destination_connection_matrix_per_day' : ['origin_destination_connection_matrix', 'day'],
-                                                                 'mean_distance_per_day' : ['mean_distance', 'day'],
-                                                                 'mean_distance_per_week' : ['mean_distance', 'week'],
-                                                                 'origin_destination_matrix_time_per_day' : ['origin_destination_matrix_time', 'day'],
-                                                                 'home_vs_day_location_per_day' : ['home_vs_day_location_per_day', ['day','week']],
-                                                                 'home_vs_day_location_per_day' : ['home_vs_day_location_per_day', ['day','month']]})
+                                                                 'origin_destination_matrix_time_per_day' : ['origin_destination_matrix_time', 'day']})
 
 
 # ## Priority indicators for admin3
 
-# In[17]:
+# In[ ]:
 
 
-agg_priority_admin3 = priority_aggregator(result_stub = '/admin3/priority',
+febmar20agg_priority_admin3 = priority_aggregator(result_stub = '/admin3/priority',
                             datasource = ds,
                             regions = 'admin3_tower_map')
 
@@ -251,6 +246,36 @@ agg_priority_tower_bulawayo.attempt_aggregation(indicators_to_produce = {'origin
 
 
 get_ipython().system('jupyter nbconvert --to script *.ipynb')
+
+
+# In[ ]:
+
+
+test = pd.DataFrame([[np.nan,1, 2],[0,1,2]])
+
+
+# In[ ]:
+
+
+test = ds.spark.createDataFrame([[None,1, 1,2],[2,2,2,2]])
+
+
+# In[ ]:
+
+
+test.toPandas()
+
+
+# In[ ]:
+
+
+test.groupby('_4').sum().toPandas()
+
+
+# In[ ]:
+
+
+test.withColumn('f', F.col('_1') + F.col('_2')).toPandas()
 
 
 # In[ ]:
