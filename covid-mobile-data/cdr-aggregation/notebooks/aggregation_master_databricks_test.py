@@ -1,14 +1,4 @@
 # Databricks notebook source
-# DBTITLE 1,Verbose notebook to run through aggregation steps
-# MAGIC %md 
-# MAGIC ## Notebook organization
-# MAGIC 1. Load CDR data from csvs and convert columns to what we need
-# MAGIC 2. Basic sanity checks
-# MAGIC 3. Import tower - admin region mapping
-# MAGIC 3. Run sql queries and save as csvs
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC Importing the necessary code:
 
@@ -88,12 +78,21 @@ ds.show_config()
 
 # COMMAND ----------
 
-ds.load_standardized_parquet_file()
-calls = ds.parquet_df
+# ds.load_standardized_parquet_file()
+# calls = ds.parquet_df
 
 # COMMAND ----------
 
+## Use this in case you want to sample the data and run the code on the sample
 
+# ds.sample_and_save(number_of_ids=1,  filestub = 'sample_temp')
+ds.load_sample('sample10')
+ds.parquet_df = ds.sample_df
+
+
+# COMMAND ----------
+
+# ds.parquet_df.count()
 
 # COMMAND ----------
 
@@ -121,30 +120,33 @@ ds.load_geo_csvs()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ## 4. Aggregations
-# MAGIC - aggregations of flowminder indicators for amdin level 3
-# MAGIC - aggregations of flowminder indicators for amdin level 2
-# MAGIC - aggregations of custom indicators for amdin level 3
-# MAGIC - aggregations of custom indicators for amdin level 2
+
 
 # COMMAND ----------
 
 # DBTITLE 1,Aggregation of priority indicators at admin2 level
 agg_priority_admin2 = priority_aggregator(result_stub = '/admin2/priority',
                                datasource = ds,
+                               re_create_vars  = True, # Needed to use sample parquet
                                regions = 'admin2_tower_map')
 
-agg_priority_admin2.attempt_aggregation()
+
+agg_priority_admin2.attempt_aggregation(indicators_to_produce = {
+  'transactions_per_hour' : ['transactions', 'hour'],
+  'origin_destination_connection_matrix_per_day' : ['origin_destination_connection_matrix', 'day'],
+  'origin_destination_matrix_time_per_day' : ['origin_destination_matrix_time', 'day']})
+
 
 # COMMAND ----------
 
 # DBTITLE 1,Aggregation of priority indicators at admin3 level
-agg_priority_admin3 = priority_aggregator(result_stub = '/admin3/priority',
-                            datasource = ds,
-                            regions = 'admin3_tower_map')
+# agg_priority_admin3 = priority_aggregator(result_stub = '/admin3/priority',
+#                             datasource = ds,
+#                             regions = 'admin3_tower_map')
 
-agg_priority_admin3.attempt_aggregation()
+# agg_priority_admin3.attempt_aggregation()
 
 # COMMAND ----------
 
+# agg_priority_admin2.calls.show()
+# agg_priority_admin2.df.select('msisdn').distinct().show()
