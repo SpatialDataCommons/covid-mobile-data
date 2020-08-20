@@ -61,7 +61,7 @@ class DataSource:
               .config("spark.driver.maxResultSize", "2g") \
               .config("spark.sql.shuffle.partitions", "16") \
               .config("spark.driver.memory", "8g") \
-              .config("spark.sql.execution.arrow.enabled", "true")\
+              .config("spark.sql.execution.arrow.enabled", "false")\
               .getOrCreate()
 
       elif self.spark_mode == 'cluster':
