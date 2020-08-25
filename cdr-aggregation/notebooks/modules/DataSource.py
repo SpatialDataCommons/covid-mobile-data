@@ -163,7 +163,8 @@ class DataSource:
     ]
 
   #Load one or multiple csvs into a data frame
-  def standardize_csv_files(self,show=False):
+#   def standardize_csv_files(self, show=False):
+  def standardize_csv_files(self, show=False, str_coords=False):
 
     #Prepare paths
     newfolder_data_paths = []
@@ -182,10 +183,25 @@ class DataSource:
 
     #get call_date from call_datetime
     raw_df = raw_df.withColumn('call_date', raw_df.call_datetime.cast('date'))
+    
+    # Convert location id to from string to a standardized long lat version so 
+    # it can be easily merged with support files 
+    if str_coords:
+#         pass
+        split_col = F.split(raw_df['location_id'], ',')
+        raw_df = raw_df.withColumn(
+            'LAT', F.round(split_col.getItem(0).cast(DoubleType()), 6))
+        raw_df = raw_df.withColumn(
+            'LNG', F.round(split_col.getItem(1).cast(DoubleType()), 6))
 
+        raw_df = raw_df.withColumn('location_id', 
+                                   F.concat(F.col('LAT'),
+                                   F.lit(' '), 
+                                   F.col('LNG')))
+    
     #Set raw data frame to object and return it
     self.raw_df = raw_df
-
+    
     if show: self.raw_df.show(10)
     return self.raw_df
 
