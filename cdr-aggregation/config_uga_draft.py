@@ -2,12 +2,12 @@ from pyspark.sql.types import *
 
 # Set up schema based on file strcucture
 schema = StructType([
-  StructField("msisdn", IntegerType(), True),
+  StructField("id",StringType(), True),
   StructField("call_datetime", StringType(), True), #load as string, will be turned into datetime in standardize_csv_files()
-  StructField("data_type", StringType(), True), #load as string, will be turned into datetime in standardize_csv_files()
+  StructField("data_type", StringType(), True), 
+  StructField("msisdn", StringType(), True),
   StructField("location_id", StringType(), True)
 ])
-
 
 datasource_configs = {
   "base_path": "/home/jovyan/work/data",
@@ -18,7 +18,7 @@ datasource_configs = {
   "schema" : schema,
   # Folders containing data in base_path/
   "data_paths" : ["*.csv"],
-  "filestub":"feb20",
+      "filestub":"test",
   # Select what type of environment, 'local', 'cluster' or 'hive'
   "spark_mode":"local",
   # Select files to be loaded. If you need to create the mappings and distances files, select just the first 3 files, these are not created by the code.
@@ -29,7 +29,7 @@ datasource_configs = {
                 "admin2_tower_map":"ug_admin2_tower_map.csv",
                 "admin3_tower_map":"ug_admin3_tower_map.csv",
                 "voronoi_tower_map":"ug_voronoi_tower_map.csv",
-                "distances" : "ug_distances_pd_long.csv"
+                    "distances" : "ug_distances_pd_long.csv"
 #                 "admin2_weight" : "ug_admin2_weight.csv",
 #                 "admin3_weight" : "ug_admin3_weight.csv"
               },
