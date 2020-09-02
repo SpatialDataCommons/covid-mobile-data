@@ -1,4 +1,4 @@
-FROM jupyter/pyspark-notebook:dc9744740e12
+FROM jupyter/pyspark-notebook:b2562c469cdd
 
 RUN python --version
 
