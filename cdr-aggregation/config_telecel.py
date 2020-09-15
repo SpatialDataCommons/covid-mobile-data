@@ -26,11 +26,11 @@ datasource_configs = {
   "geofiles": { "tower_sites":"sites-lookup-edited.csv",
                 "admin2":"zw_admin2_shapefile.csv",
                 "admin3":"zw_admin3_shapefile.csv",
-                "voronoi":"zw_voronoi_shapefile.csv",
-                "admin2_tower_map":"zw_admin2_tower_map.csv",
-                "admin3_tower_map":"zw_admin3_tower_map.csv",
-                "voronoi_tower_map":"zw_voronoi_tower_map.csv",
-                "distances" : "zw_distances_pd_long.csv"
+                "voronoi":"ZW_voronoi_shapefile.csv",
+                "admin2_tower_map":"ZW_admin2_tower_map.csv",
+                "admin3_tower_map":"ZW_admin3_tower_map.csv",
+                "voronoi_tower_map":"ZW_voronoi_tower_map.csv",
+                "distances" : "ZW_distances_pd_long.csv"
               },
   # Select levels to  
   "shapefiles": ['admin2','admin3'],
