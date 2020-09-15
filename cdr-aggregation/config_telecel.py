@@ -3,12 +3,14 @@ from pyspark.sql.types import *
 
 # Set up schema based on file strcucture
 schema = StructType([
-  StructField("MSISDN_ID",StringType(), True),
-  StructField("START_TIME", StringType(), True), #load as string, will be turned into datetime in standardize_csv_files()
-  StructField("LACCELL", StringType(), True)
+  StructField("msisdn", IntegerType(), True),
+  StructField("call_datetime", StringType(), True), #load as string, will be turned into datetime in standardize_csv_files()
+  StructField("location_id", StringType(), True)
 ])
 
 datasource_configs = {
+  "load_datemask":[str,"yyyy/MM/dd HH:mm:ss"],
+  "load_header":[str,"true"],
   "base_path": "/mnt/COVID19Data/proof-of-concept",
   # Subfolders in outputs
   "country_code": "ZW",
@@ -16,7 +18,7 @@ datasource_configs = {
   # Schema
   "schema" : schema,
   # Folders containing data in base_path/
-  "data_paths" : ["*.txt"],
+  "data_paths" : ["wb_cdr_final_201901.txt"],
   "filestub":"teleceltest",
   # Select what type of environment, 'local', 'cluster' or 'hive'
   "spark_mode":"cluster",
