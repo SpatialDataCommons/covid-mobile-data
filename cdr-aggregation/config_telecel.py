@@ -9,8 +9,8 @@ schema = StructType([
 ])
 
 datasource_configs = {
-  "load_datemask":[str,"yyyy/MM/dd HH:mm:ss"],
-  "load_header":[str,"true"],
+  "load_datemask":"yyyy-MM-dd HH:mm:ss",
+  "load_header":"true",
   "base_path": "/mnt/COVID19Data/proof-of-concept",
   # Subfolders in outputs
   "country_code": "ZW",
@@ -23,7 +23,7 @@ datasource_configs = {
   # Select what type of environment, 'local', 'cluster' or 'hive'
   "spark_mode":"cluster",
   # Select files to be loaded. If you need to create the mappings and distances files, select just the first 3 files, these are not created by the code.
-  "geofiles": { "tower_sites":"sites_lookup.csv",
+  "geofiles": { "tower_sites":"sites-lookup.csv",
                 # "admin2":"ug_admin2_shapefile.csv",
                 # "admin3":"ug_admin3_shapefile.csv",
                 # "voronoi":"ug_voronoi_shapefile.csv",
