@@ -1,3 +1,4 @@
+# Databricks notebook source
 from pyspark.sql.types import *
 
 # Set up schema based on file strcucture
@@ -31,6 +32,6 @@ datasource_configs = {
               },
   # Select levels to  
   "shapefiles": ['admin2','admin3'],
-#   "shapefiles": ['admin2','admin3', 'voronoi'],
-  "dates": {'start_date' : dt.datetime(2020,2,1),
-            'end_date' : dt.datetime(2020,3,31)}}
+# "shapefiles": ['admin2','admin3', 'voronoi'],
+  "dates": {'start_date' : dt.datetime(2020,1,1),
+            'end_date' : dt.datetime(2020,2,1)}}
