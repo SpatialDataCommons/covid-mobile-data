@@ -18,7 +18,7 @@ datasource_configs = {
   # Schema
   "schema" : schema,
   # Folders containing data in base_path/
-  "data_paths" : ["*.txt"],
+  "data_paths" : ["world_bank_cdr_new.csv"],
   "filestub":"full",
   # Select what type of environment, 'local', 'cluster' or 'hive'
   "spark_mode":"cluster",
