@@ -3,9 +3,13 @@ from pyspark.sql.types import *
 
 # Set up schema based on file strcucture
 schema = StructType([
-  StructField("msisdn", IntegerType(), True),
   StructField("call_datetime", StringType(), True), #load as string, will be turned into datetime in standardize_csv_files()
-  StructField("location_id", StringType(), True)
+  StructField("msisdn", IntegerType(), True),
+  StructField("location_id", StringType(), True),
+  StructField("province", StringType(), True),
+  StructField("city", StringType(), True),
+  StructField("longitude", StringType(), True),
+  StructField("latitude", StringType(), True)
 ])
 
 datasource_configs = {
