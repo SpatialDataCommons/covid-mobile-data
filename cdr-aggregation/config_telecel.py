@@ -14,7 +14,7 @@ schema = StructType([
 
 datasource_configs = {
 #   "load_datemask":"yyyy-MM-dd HH:mm:ss",
-  "load_datemask":"aaa bbb dd HH:mm:ss zzz yyyy",
+  "load_datemask":"EEE MMM dd HH:mm:ss zzz yyyy",
   "load_header":"true",
   "base_path": "/mnt/COVID19Data/proof-of-concept",
   # Subfolders in outputs
