@@ -40,5 +40,5 @@ datasource_configs = {
   # Select levels to  
   "shapefiles": ['admin2','admin3'],
 # "shapefiles": ['admin2','admin3', 'voronoi'],
-  "dates": {'start_date' : dt.datetime(2016,12,1),
-            'end_date' : dt.datetime(2019,2,28)}}
+  "dates": {'start_date' : dt.datetime(2019,12,1),
+            'end_date' : dt.datetime(2020,6,1)}}
