@@ -13,8 +13,8 @@ schema = StructType([
 ])
 
 datasource_configs = {
-#   "load_datemask":"yyyy-MM-dd HH:mm:ss",
-  "load_datemask":"EEE MMM dd HH:mm:ss zzz yyyy",
+#   "load_datemask":"E M dd HH:mm:ss z yyyy",
+   "load_datemask": "E MMM dd HH:mm:ss yyyy" # After removing timezone
   "load_header":"true",
   "base_path": "/mnt/COVID19Data/proof-of-concept",
   # Subfolders in outputs
@@ -24,6 +24,7 @@ datasource_configs = {
   "schema" : schema,
   # Folders containing data in base_path/
   "data_paths" : ["world_bank_cdr_new.csv"],
+  # Standardized parquet file name
   "filestub":"full",
   # Select what type of environment, 'local', 'cluster' or 'hive'
   "spark_mode":"cluster",
