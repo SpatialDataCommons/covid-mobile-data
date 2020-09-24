@@ -59,7 +59,36 @@
 # COMMAND ----------
 
 # DBTITLE 1,Load Config file for this datasource
-# MAGIC %run COVID19DataAnalysis/datasource_config_files/config_telecel 
+# MAGIC %run COVID19DataAnalysis/datasource_config_files/config_telecel
+
+# COMMAND ----------
+
+# Overwrite original standardization of csvs because of data format and save as parquet
+# ds.standardize_csv_files(show=True)
+
+#Prepare paths
+newfolder_data_paths = []
+for data_path in ds.data_paths:
+  newfolder_data_paths.append(ds.newdata_path+"/"+data_path)
+
+#Load csv file or files using load option and schema
+raw_df = ds.spark.read\
+  .option("delimiter", ds.load_seperator)\
+  .option("header", ds.load_header)\
+  .option("mode", ds.load_mode)\
+  .csv(newfolder_data_paths, schema=ds.schema)
+
+# CHANGING ORIGINAL STRING BEFORE CONVERTING TO TIMESTAMP
+raw_df = raw_df.withColumn("call_datetime", F.regexp_replace(F.col("call_datetime"), "CAT ", ""))\
+  .withColumn("call_datetime", to_timestamp("call_datetime", "E MMM dd HH:mm:ss yyyy"))
+
+#get call_date from call_datetime
+raw_df = raw_df.withColumn('call_date', raw_df.call_datetime.cast('date'))
+
+#Set raw data frame to object and return it
+ds.raw_df = raw_df
+
+ds.save_as_parquet()
 
 # COMMAND ----------
 
@@ -70,14 +99,9 @@ ds.show_config()
 
 # COMMAND ----------
 
-# #Standardize the csv and save as parque
-# ds.standardize_csv_files(show=True)
-# ds.save_as_parquet()
-
-# COMMAND ----------
-
 ds.load_standardized_parquet_file()
-calls = ds.parquet_df
+# calls = ds.parquet_df
+ds.parquet_df.show()
 
 # COMMAND ----------
 
@@ -91,14 +115,14 @@ ds.load_geo_csvs()
 
 ## Use this in case you want to cluster the towers and create a distance matrix
 
-ds.create_gpds()
-clusterer = tower_clusterer(ds, 'admin2', 'ID_2')
-ds.admin2_tower_map, ds.distances = clusterer.cluster_towers()
+# ds.create_gpds()
+# clusterer = tower_clusterer(ds, 'admin2', 'ID_2')
+# ds.admin2_tower_map, ds.distances = clusterer.cluster_towers()
 
 # COMMAND ----------
 
-clusterer = tower_clusterer(ds, 'admin3', 'ADM3_PCODE')
-ds.admin3_tower_map, ds.distances  = clusterer.cluster_towers()
+# clusterer = tower_clusterer(ds, 'admin3', 'ADM3_PCODE')
+# ds.admin3_tower_map, ds.distances  = clusterer.cluster_towers()
 
 # COMMAND ----------
 
@@ -110,8 +134,9 @@ ds.voronoi = voronoi.make_voronoi()
 # COMMAND ----------
 
 # DBTITLE 1,Aggregation of priority indicators at admin2 level
-# agg_priority_admin2 = priority_aggregator(result_stub = '/admin2/priority',
+# agg_priority_admin2 = priority_aggregator(result_stub = '/admin2',
 #                                datasource = ds,
+#                                re_create_vars = True,
 #                                regions = 'admin2_tower_map')
 
 # agg_priority_admin2.attempt_aggregation()
@@ -119,8 +144,9 @@ ds.voronoi = voronoi.make_voronoi()
 # COMMAND ----------
 
 # DBTITLE 1,Aggregation of priority indicators at admin3 level
-# agg_priority_admin3 = priority_aggregator(result_stub = '/admin3/priority',
+# agg_priority_admin3 = priority_aggregator(result_stub = '/admin3/',
 #                             datasource = ds,
+#                             re_create_vars = True,
 #                             regions = 'admin3_tower_map')
 
 # agg_priority_admin3.attempt_aggregation()
@@ -128,8 +154,9 @@ ds.voronoi = voronoi.make_voronoi()
 # COMMAND ----------
 
 # DBTITLE 1,Aggregation of priority indicators for tower-cluster
-# agg_priority_tower = priority_aggregator(result_stub = '/voronoi/priority',
+# agg_priority_tower = priority_aggregator(result_stub = '/voronoi/',
 #                                datasource = ds,
+#                                re_create_vars = True,
 #                                regions = 'voronoi_tower_map')
 
 # agg_priority_tower.attempt_aggregation(indicators_to_produce = {'unique_subscribers_per_hour' : ['unique_subscribers', 'hour'],
