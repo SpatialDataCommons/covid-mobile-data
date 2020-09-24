@@ -14,7 +14,7 @@ schema = StructType([
 
 datasource_configs = {
 #   "load_datemask":"E M dd HH:mm:ss z yyyy",
-   "load_datemask": "E MMM dd HH:mm:ss yyyy" # After removing timezone
+  "load_datemask": "E MMM dd HH:mm:ss yyyy", # After removing timezone
   "load_header":"true",
   "base_path": "/mnt/COVID19Data/proof-of-concept",
   # Subfolders in outputs
@@ -29,14 +29,14 @@ datasource_configs = {
   # Select what type of environment, 'local', 'cluster' or 'hive'
   "spark_mode":"cluster",
   # Select files to be loaded. If you need to create the mappings and distances files, select just the first 3 files, these are not created by the code.
-  "geofiles": { "tower_sites":"sites-lookup-edited.csv",
+  "geofiles": { "tower_sites":"unique-tower-sites-edited.csv",
                 "admin2":"zw_admin2_shapefile.csv",
-                "admin3":"zw_admin3_shapefile.csv",
-                "voronoi":"ZW_voronoi_shapefile.csv",
-                "admin2_tower_map":"ZW_admin2_tower_map.csv",
-                "admin3_tower_map":"ZW_admin3_tower_map.csv",
-                "voronoi_tower_map":"ZW_voronoi_tower_map.csv",
-                "distances" : "ZW_distances_pd_long.csv"
+                "admin3":"zw_admin3_shapefile.csv"
+#                 "voronoi":"ZW_voronoi_shapefile.csv",
+#                 "admin2_tower_map":"ZW_admin2_tower_map.csv",
+#                 "admin3_tower_map":"ZW_admin3_tower_map.csv",
+#                 "voronoi_tower_map":"ZW_voronoi_tower_map.csv",
+#                 "distances" : "ZW_distances_pd_long.csv"
               },
   # Select levels to  
   "shapefiles": ['admin2','admin3'],
