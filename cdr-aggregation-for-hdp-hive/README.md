@@ -74,14 +74,14 @@ This code is an extension of cdr-aggregation under [worldbank/covid-mobile-data]
   * Run the command to create **`/work`** in hdfs
     ```
     hdfs dfs -mkdir /work
-    hdfs dfs -mkdir -p /work/data/results/country_code/mno
-    hdfs dfs -mkdir -p /work/data/standardized/country_code/mno
-    hdfs dfs -mkdir -p /work/data/support-data/country_code/mno/geofiles
-    hdfs dfs -mkdir -p /work/data/tempfiles/country_code/mno
-    hdfs dfs -mkdir -p /work/data/new/country_code/mno
+    hdfs dfs -mkdir -p /work/data/results/country_code/telecom_alias
+    hdfs dfs -mkdir -p /work/data/standardized/country_code/telecom_alias
+    hdfs dfs -mkdir -p /work/data/support-data/country_code/telecom_alias/geofiles
+    hdfs dfs -mkdir -p /work/data/tempfiles/country_code/telecom_alias
+    hdfs dfs -mkdir -p /work/data/new/country_code/telecom_alias
 
     * change "country_code" to code of country such as JP, MZ, US
-    * change "mno" to short code of mobile operator
+    * change "telecom_alias" to short code of mobile operator
     ```
 
 ## Prepare necessary data
@@ -96,9 +96,9 @@ This code is an extension of cdr-aggregation under [worldbank/covid-mobile-data]
     * create table calls (msisdn string,call_datetime string,latitude string,longitude string,location_id string, call_date string).
     * Make sure to have data in the table.
   * Copy Cell tower shape file and Admin shape file data to the following directory in HDFS 
-    * HDFS directory: `/work/data/support-data/country_code/mno/geofiles/`
+    * HDFS directory: `/work/data/support-data/country_code/telecom_alias/geofiles/`
     * change `country_code` to code of country such as JP, MZ, US
-    * change `mno` to short code of mobile operator
+    * change `telecom_alias` to short code of mobile operator such as mno1,
 
 ## Access to jupyter notebook
   * Goto `/home/cdrspark`
@@ -115,8 +115,10 @@ This code is an extension of cdr-aggregation under [worldbank/covid-mobile-data]
   ```
 ## Initial setup 
   * Access to **config_file_hive.py**
+    * **`hive_warehouse_location`** Specify path of hive warehouse. Normally `/apps/hive/warehouse`
+    * **`hive_metastore_uris`** specify thrift service uris of the cluster. Ex: `thrift://<IPaddress>:9083`
     * **`spark_mode`** Change spark mode to hive
-    * **`hive_vars`** Adjust table according to your structure
+    * **`hive_vars`** Adjust table according to your structure.
     * **`country_code`** change country code => e.g. moz 
     * **`telecom_alias`** change  telecom alias => e.g. mno 
     * **`geofiles`** specify 'tower_sites': 'basestation_wkt.csv', 'admin2' : 'admin2_wkt.csv', 'admin3' : 'admin3_wkt.csv'
@@ -124,8 +126,9 @@ This code is an extension of cdr-aggregation under [worldbank/covid-mobile-data]
 
       ```
       datasource_configs = {
-        "base_path": "path_to_folder/data", #folder path used in this docker env
+        "base_path": "path_to_folder/data", #no need to change
         "hive_warehouse_location": "/apps/hive/warehouse",
+        "hive_metastore_uris": "thrift://<IPaddress>:9083", 
         "spark_mode": 'hive',
         "hive_vars":{ 'msisdn' : 'col1',
                       'call_datetime': 'col2',
@@ -144,35 +147,30 @@ This code is an extension of cdr-aggregation under [worldbank/covid-mobile-data]
       ```
   
   * Verify hive connection and check data
-    * Specify **`hive.metastore.uris`** as defined in the cluster in testsparkhive.ipynb
-    * Run testsparkhive.ipynb to check data connection to the hive 
+    * Open and run **`test_spark_hive.ipynb`** to check data connection to the hive. 
 
 
 ## Run script for indicators
-  * Specify **`hive.metastore.uris`** as defined in the cluster in DataSource.py
+  * Run **`aggregation_master_hive.ipynb`** script to compute the indicator at admin2, admin3 and voronoi level
     ```
-    ~/covid-mobile-data/cdr-aggregation-hive/notebooks/modules/DataSource.py
-    ```
-  * Run **`aggregation_master.ipynb`** script to compute the indicator at admin2, admin3 and voronoi level
-    ```
-    ~/cdr-aggregation-hive/notebooks/aggregation_master.ipynb
+    ~/cdr-aggregation-hive/notebooks/aggregation_master_hive.ipynb
     ```
 
 ## Indicators results
-  * Indicators results are stored in the **`/work/data/results/country_code/mno`** directory in **HDFS**
+  * Indicators results are stored in the **`/work/data/results/country_code/telecom_alias`** directory in **HDFS**
   * Result for **admin2** level 
     ```
-    /work/data/results/moz/mno/admin2/flowminder
-    /work/data/results/moz/mno/admin2/priority
+    /work/data/results/country_code/telecom_alias/admin2/flowminder
+    /work/data/results/country_code/telecom_alias/admin2/priority
     ```
   * Result for **admin3** level 
        ```
-      /work/data/results/moz/mno/admin3/flowminder
-      /work/data/results/moz/mno/admin3/priority
+      /work/data/results/country_code/telecom_alias/admin3/flowminder
+      /work/data/results/country_code/telecom_alias/admin3/priority
       ```
   * Result for **voronoi** level 
        ```
-      /work/data/results/moz/mno/voronoi/priority
+      /work/data/results/country_code/telecom_alias/voronoi/priority
       ```
-
+  * **`country_code`** and **`telecom_alias`** should be replaced with the one in **`config_file_hive.py`**
 
