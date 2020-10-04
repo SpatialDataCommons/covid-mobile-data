@@ -153,7 +153,7 @@ This code is an extension of cdr-aggregation under [worldbank/covid-mobile-data]
 ## Run script for indicators
   * Run **`aggregation_master_hive.ipynb`** script to compute the indicator at admin2, admin3 and voronoi level
     ```
-    ~/cdr-aggregation-hive/notebooks/aggregation_master_hive.ipynb
+    ~/cdr-aggregation-hdp-hive/notebooks/aggregation_master_hive.ipynb
     ```
 
 ## Indicators results
