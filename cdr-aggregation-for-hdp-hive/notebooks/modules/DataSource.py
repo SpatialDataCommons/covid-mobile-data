@@ -53,7 +53,7 @@ class DataSource:
             raise Exception("Specify hive warehouse location.")
           self.spark = SparkSession.builder\
               .appName("CDR Aggregation") \
-              .config("hive.metastore.uris", 'thrift://203.159.10.50:9083') \
+              .config("hive.metastore.uris", self.hive_metastore_uris) \
               .config("spark.sql.warehouse.dir", self.hive_warehouse_location) \
               .config("spark.driver.memory", "25g") \
               .config("spark.executor.memory", "25g") \
