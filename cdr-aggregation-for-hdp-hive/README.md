@@ -1,6 +1,6 @@
 # Aggregation of CDR Data (for running on HDP/Hive)
 
-This code is an extension of cdr-aggregation under [worldbank/covid-mobile-data](https://github.com/worldbank/covid-mobile-data/tree/master/cdr-aggregation). It specifically customized to allow computing the indicators on the data resisted on Hive table under Hortonwork Data Platform (HDP).
+This code is an extension of cdr-aggregation under [worldbank/covid-mobile-data](https://github.com/worldbank/covid-mobile-data/tree/master/cdr-aggregation). It specifically customized to allow computing the indicators on the data resisted on Hive table under Hortonworks Data Platform (HDP).
 
 
 ### Table of contents
